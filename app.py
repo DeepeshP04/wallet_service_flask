@@ -1,6 +1,5 @@
 from flask import Flask
-from extensions import db
-from flask_migrate import Migrate
+from extensions import db, migrate
 from models import Wallet, Hold, OperationLog
 
 def create_app():
@@ -8,7 +7,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///wallet.db'
     db.init_app(app)
-    migrate = Migrate(app, db)
+    migrate.init_app(app, db)
 
     # Create tables
     with app.app_context():
