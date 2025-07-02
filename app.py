@@ -1,6 +1,7 @@
 from flask import Flask
 from extensions import db
 from flask_migrate import Migrate
+from models import Wallet, Hold, OperationLog
 
 def create_app():
     # Create app and configure database
