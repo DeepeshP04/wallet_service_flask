@@ -14,7 +14,7 @@ class Hold(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     wallet_id = db.Column(db.Integer, db.ForeignKey('wallet.id'), nullable=False)
     amount = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(20), nullable=False, default='PENDING')
+    status = db.Column(db.String(20), nullable=False, default='HOLD')
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     released_at = db.Column(db.DateTime, nullable=True)
     reversed_at = db.Column(db.DateTime, nullable=True)
