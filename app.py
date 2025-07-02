@@ -14,6 +14,10 @@ def create_app():
         db.create_all()
         print("Tables created successfully")
 
+    # Register blueprints
+    from wallet_routes import wallet_bp
+    app.register_blueprint(wallet_bp)
+
     return app
 
 app = create_app()
