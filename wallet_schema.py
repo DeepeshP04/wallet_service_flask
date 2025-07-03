@@ -15,5 +15,14 @@ class AddMoneyRequestSchema(Schema):
     amount = fields.Float(required=True, validate=validate.Range(min=0.01, error="Amount must be greater than 0"))
 
 class HoldRequestSchema(Schema):
-    wallet_id = fields.Int(required=True)
+    user_id = fields.Int(required=True)
     amount = fields.Float(required=True, validate=validate.Range(min=0.01, error="Amount must be greater than 0"))
+
+class HoldResponseSchema(Schema):
+    id = fields.Int()
+    wallet_id = fields.Int()
+    amount = fields.Float()
+    status = fields.Str()
+    created_at = fields.DateTime()
+    released_at = fields.DateTime(allow_none=True)
+    reversed_at = fields.DateTime(allow_none=True)
