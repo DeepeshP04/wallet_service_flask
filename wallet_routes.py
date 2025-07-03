@@ -46,3 +46,13 @@ def hold_money():
 
     response = HoldResponseSchema().dump(hold)
     return jsonify({"message": "Money held successfully", "data": response}), 200
+
+@wallet_bp.route('/release_hold', methods=['POST'])
+def release_hold():
+    try:
+        released_count = services.release_hold()
+        if released_count == 0:
+            return jsonify({"message": "No holds to release"}), 200
+        return jsonify({"message": f"{released_count} holds released"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

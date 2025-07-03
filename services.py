@@ -1,5 +1,6 @@
 from models import Wallet, Hold
 from extensions import db
+from datetime import datetime, timedelta
 
 def init_wallet(user_id, currency):
     existing_wallet = Wallet.query.filter_by(user_id=user_id).first()
@@ -33,3 +34,20 @@ def hold_money(user_id, amount):
     db.session.add(hold)
     db.session.commit()
     return hold, None
+
+def release_hold():
+    now = datetime.utcnow()
+    ten_min_ago = now - timedelta(minutes=10)
+    holds = Hold.query.filter(Hold.status == 'active', Hold.created_at <= ten_min_ago).all()
+    
+    released_count = 0
+    if holds:
+        for hold in holds:
+            wallet = Wallet.query.get(hold.wallet_id)
+            if wallet:
+                wallet.balance += hold.amount
+                hold.status = 'released'
+                hold.released_at = now
+                released_count += 1
+        db.session.commit()
+    return released_count
