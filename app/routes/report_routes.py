@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
-from wallet_schema import WalletBalanceRequestSchema, WalletResponseSchema, HoldReportRequestSchema, HoldReportResponseSchema, WalletOperationRequestSchema, WalletOperationResponseSchema
-from services import wallet_services, report_services
+from app.schemas.schema import WalletBalanceRequestSchema, WalletResponseSchema, HoldReportRequestSchema, HoldReportResponseSchema, WalletOperationRequestSchema, WalletOperationResponseSchema
+from app.services import wallet_services, report_services
 
 report_bp = Blueprint('report', __name__, url_prefix='/report')
 

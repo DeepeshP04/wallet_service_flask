@@ -1,26 +1,4 @@
-from flask import Flask
-from extensions import db, migrate
-from models import Wallet, Hold, OperationLog
-
-def create_app():
-    # Create app and configure database
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///wallet.db'
-    db.init_app(app)
-    migrate.init_app(app, db)
-
-    # Create tables
-    with app.app_context():
-        db.create_all()
-        print("Tables created successfully")
-
-    # Register blueprints
-    from routes.wallet_routes import wallet_bp
-    from routes.report_routes import report_bp
-    app.register_blueprint(wallet_bp)
-    app.register_blueprint(report_bp)
-
-    return app
+from app import create_app
 
 app = create_app()
 

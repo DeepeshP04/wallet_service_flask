@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
-from wallet_schema import WalletRequestSchema, WalletResponseSchema, AddMoneyRequestSchema, HoldRequestSchema, HoldResponseSchema, ReverseHoldRequestSchema
-from services import wallet_services
+from app.schemas.schema import WalletRequestSchema, WalletResponseSchema, AddMoneyRequestSchema, HoldRequestSchema, HoldResponseSchema, ReverseHoldRequestSchema
+from app.services import wallet_services
 
 wallet_bp = Blueprint('wallet', __name__, url_prefix='/wallet')
 
