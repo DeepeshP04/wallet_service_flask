@@ -6,6 +6,7 @@ class Wallet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     currency = db.Column(db.String(3), nullable=False, default='INR')
     balance = db.Column(db.Float, nullable=False, default=0.0)
+    user_id = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
     holds = db.relationship('Hold', backref='wallet', lazy=True)
