@@ -15,8 +15,8 @@ def create_app():
         print("Tables created successfully")
 
     # Register blueprints
-    from wallet_routes import wallet_bp
-    from report_routes import report_bp
+    from routes.wallet_routes import wallet_bp
+    from routes.report_routes import report_bp
     app.register_blueprint(wallet_bp)
     app.register_blueprint(report_bp)
 

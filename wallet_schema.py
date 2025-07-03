@@ -41,3 +41,10 @@ class HoldReportResponseSchema(Schema):
     active = fields.Int()
     released = fields.Int()
     reversed = fields.Int()
+
+class WalletOperationRequestSchema(Schema):
+    user_id = fields.Int(required=True)
+
+class WalletOperationResponseSchema(Schema):
+    add = fields.Int()
+    hold = fields.Int()

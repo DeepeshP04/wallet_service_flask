@@ -1,6 +1,16 @@
-from models import Wallet, Hold
+from models import Wallet, Hold, OperationLog
 from extensions import db
 from datetime import datetime, timedelta
+
+def log_operation(wallet_id, operation, amount, hold_id=None):
+    log = OperationLog(
+        wallet_id=wallet_id,
+        hold_id=hold_id,
+        operation=operation,
+        amount=amount,
+        created_at=datetime.utcnow()
+    )
+    db.session.add(log)
 
 def init_wallet(user_id, currency):
     existing_wallet = Wallet.query.filter_by(user_id=user_id).first()
@@ -18,6 +28,7 @@ def add_money_to_wallet(user_id, amount):
         return None, "Wallet not found"
 
     wallet.balance += amount
+    log_operation(wallet.id, "add_money", amount)
     db.session.commit()
     return wallet, None
 
@@ -32,6 +43,7 @@ def hold_money(user_id, amount):
     wallet.balance -= amount
     hold = Hold(wallet_id=wallet.id, amount=amount, status='active')
     db.session.add(hold)
+    log_operation(wallet.id, "hold_money", amount, hold_id=hold.id)
     db.session.commit()
     return hold, None
 
@@ -48,6 +60,7 @@ def release_hold():
                 wallet.balance += hold.amount
                 hold.status = 'released'
                 hold.released_at = now
+                log_operation(wallet.id, "release_hold", hold.amount, hold_id=hold.id)
                 released_count += 1
         db.session.commit()
     return released_count
@@ -67,12 +80,6 @@ def reverse_hold(user_id, hold_id):
     wallet.balance += hold.amount
     hold.status = 'reversed'
     hold.reversed_at = datetime.utcnow()
+    log_operation(wallet.id, "reverse_hold", hold.amount, hold_id=hold.id)
     db.session.commit()
     return hold, None
-
-def get_wallet_balance(user_id):
-    wallet = Wallet.query.filter_by(user_id=user_id).first()
-    if not wallet:
-        return None, "Wallet not found"
-    return wallet, None
-    
