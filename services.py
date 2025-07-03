@@ -51,3 +51,22 @@ def release_hold():
                 released_count += 1
         db.session.commit()
     return released_count
+
+def reverse_hold(user_id, hold_id):
+    hold = Hold.query.get(hold_id)
+    if not hold:
+        return None, "Hold not found"
+    if hold.status != 'active':
+        return None, "Hold is not active"
+    wallet = Wallet.query.get(hold.wallet_id)
+    if not wallet:
+        return None, "Wallet not found"
+    if user_id != wallet.user_id:
+        return None, "Hold does not belong to this user"
+
+    wallet.balance += hold.amount
+    hold.status = 'reversed'
+    hold.reversed_at = datetime.utcnow()
+    db.session.commit()
+    return hold, None
+    

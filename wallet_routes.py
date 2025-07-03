@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from wallet_schema import WalletRequestSchema, WalletResponseSchema, AddMoneyRequestSchema, HoldRequestSchema, HoldResponseSchema
+from wallet_schema import WalletRequestSchema, WalletResponseSchema, AddMoneyRequestSchema, HoldRequestSchema, HoldResponseSchema, ReverseHoldRequestSchema
 import services
 
 wallet_bp = Blueprint('wallet', __name__, url_prefix='/wallet')
@@ -56,3 +56,17 @@ def release_hold():
         return jsonify({"message": f"{released_count} holds released"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@wallet_bp.route('/reverse_hold', methods=['POST'])
+def reverse_hold():
+    try:
+        data = ReverseHoldRequestSchema().load(request.get_json())
+    except Exception as e:
+        return jsonify({"message": "Invalid request", "error": str(e)}), 400
+    
+    hold, error = services.reverse_hold(data['user_id'], data['hold_id'])
+    if error:
+        return jsonify({"error": error}), 400
+    
+    response = HoldResponseSchema().dump(hold)
+    return jsonify({"message": "Hold reversed successfully", "data": response}), 200
