@@ -33,3 +33,11 @@ class ReverseHoldRequestSchema(Schema):
 
 class WalletBalanceRequestSchema(Schema):
     user_id = fields.Int(required=True)
+
+class HoldReportRequestSchema(Schema):
+    user_id = fields.Int(required=True)
+
+class HoldReportResponseSchema(Schema):
+    active = fields.Int()
+    released = fields.Int()
+    reversed = fields.Int()
