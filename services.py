@@ -11,8 +11,8 @@ def init_wallet(user_id, currency):
     db.session.commit()
     return wallet, None
 
-def add_money_to_wallet(wallet_id, amount):
-    wallet = Wallet.query.get(wallet_id)
+def add_money_to_wallet(user_id, amount):
+    wallet = Wallet.query.get(user_id)
     if not wallet:
         return None, "Wallet not found"
 

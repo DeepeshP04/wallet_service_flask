@@ -26,7 +26,7 @@ def add_money():
     except Exception as e:
         return jsonify({"message": "Invalid request", "error": str(e)}), 400
 
-    wallet, error = services.add_money_to_wallet(data['wallet_id'], data['amount'])
+    wallet, error = services.add_money_to_wallet(data['user_id'], data['amount'])
     if error:
         return jsonify({"error": error}), 400
 
