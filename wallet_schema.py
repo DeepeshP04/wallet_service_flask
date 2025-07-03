@@ -26,3 +26,7 @@ class HoldResponseSchema(Schema):
     created_at = fields.DateTime()
     released_at = fields.DateTime(allow_none=True)
     reversed_at = fields.DateTime(allow_none=True)
+
+class ReverseHoldRequestSchema(Schema):
+    user_id = fields.Int(required=True)
+    hold_id = fields.Int(required=True)
