@@ -1,11 +1,15 @@
 from models import Wallet
 from extensions import db
 
-def init_wallet():
-    wallet = Wallet()
+def init_wallet(user_id, currency):
+    existing_wallet = Wallet.query.filter_by(user_id=user_id).first()
+    if existing_wallet:
+        return None, "Wallet already exists"
+
+    wallet = Wallet(user_id=user_id, currency=currency)
     db.session.add(wallet)
     db.session.commit()
-    return wallet
+    return wallet, None
 
 def add_money_to_wallet(wallet_id, amount):
     wallet = Wallet.query.get(wallet_id)

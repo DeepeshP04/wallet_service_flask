@@ -1,7 +1,12 @@
 from marshmallow import Schema, fields, validate
 
+class WalletRequestSchema(Schema):
+    user_id = fields.Int(required=True)
+    currency = fields.Str(required=True, validate=validate.Length(equal=3))
+
 class WalletResponseSchema(Schema):
     id = fields.Int()
+    user_id = fields.Int()
     currency = fields.Str()
     balance = fields.Float()
 

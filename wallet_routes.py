@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from wallet_schema import WalletResponseSchema, AddMoneyRequestSchema
+from wallet_schema import WalletRequestSchema, WalletResponseSchema, AddMoneyRequestSchema
 import services
 
 wallet_bp = Blueprint('wallet', __name__, url_prefix='/wallet')
@@ -7,7 +7,15 @@ wallet_bp = Blueprint('wallet', __name__, url_prefix='/wallet')
 # Initialize wallet
 @wallet_bp.route('/init', methods=['POST'])
 def init_wallet():
-    wallet = services.init_wallet()
+    try:
+        data = WalletRequestSchema().load(request.get_json())
+    except Exception as e:
+        return jsonify({"message": "Invalid request", "error": str(e)}), 400
+
+    wallet, error = services.init_wallet(data['user_id'], data['currency'])
+    if error:
+        return jsonify({"error": error}), 400
+
     response = WalletResponseSchema().dump(wallet)
     return jsonify({"message": "Wallet created successfully", "data": response}), 201
 
