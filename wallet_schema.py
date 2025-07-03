@@ -30,3 +30,6 @@ class HoldResponseSchema(Schema):
 class ReverseHoldRequestSchema(Schema):
     user_id = fields.Int(required=True)
     hold_id = fields.Int(required=True)
+
+class WalletBalanceRequestSchema(Schema):
+    user_id = fields.Int(required=True)

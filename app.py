@@ -16,7 +16,9 @@ def create_app():
 
     # Register blueprints
     from wallet_routes import wallet_bp
+    from report_routes import report_bp
     app.register_blueprint(wallet_bp)
+    app.register_blueprint(report_bp)
 
     return app
 

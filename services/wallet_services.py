@@ -69,4 +69,10 @@ def reverse_hold(user_id, hold_id):
     hold.reversed_at = datetime.utcnow()
     db.session.commit()
     return hold, None
+
+def get_wallet_balance(user_id):
+    wallet = Wallet.query.filter_by(user_id=user_id).first()
+    if not wallet:
+        return None, "Wallet not found"
+    return wallet, None
     

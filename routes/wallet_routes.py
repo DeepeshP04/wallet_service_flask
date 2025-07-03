@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from wallet_schema import WalletRequestSchema, WalletResponseSchema, AddMoneyRequestSchema, HoldRequestSchema, HoldResponseSchema, ReverseHoldRequestSchema
-import services
+from services import wallet_services
 
 wallet_bp = Blueprint('wallet', __name__, url_prefix='/wallet')
 
@@ -12,7 +12,7 @@ def init_wallet():
     except Exception as e:
         return jsonify({"message": "Invalid request", "error": str(e)}), 400
 
-    wallet, error = services.init_wallet(data['user_id'], data['currency'])
+    wallet, error = wallet_services.init_wallet(data['user_id'], data['currency'])
     if error:
         return jsonify({"error": error}), 400
 
@@ -26,7 +26,7 @@ def add_money():
     except Exception as e:
         return jsonify({"message": "Invalid request", "error": str(e)}), 400
 
-    wallet, error = services.add_money_to_wallet(data['user_id'], data['amount'])
+    wallet, error = wallet_services.add_money_to_wallet(data['user_id'], data['amount'])
     if error:
         return jsonify({"error": error}), 400
 
@@ -40,7 +40,7 @@ def hold_money():
     except Exception as e:
         return jsonify({"message": "Invalid request", "error": str(e)}), 400
 
-    hold, error = services.hold_money(data['user_id'], data['amount'])
+    hold, error = wallet_services.hold_money(data['user_id'], data['amount'])
     if error:
         return jsonify({"error": error}), 400
 
@@ -50,7 +50,7 @@ def hold_money():
 @wallet_bp.route('/release_hold', methods=['POST'])
 def release_hold():
     try:
-        released_count = services.release_hold()
+        released_count = wallet_services.release_hold()
         if released_count == 0:
             return jsonify({"message": "No holds to release"}), 200
         return jsonify({"message": f"{released_count} holds released"}), 200
@@ -64,7 +64,7 @@ def reverse_hold():
     except Exception as e:
         return jsonify({"message": "Invalid request", "error": str(e)}), 400
     
-    hold, error = services.reverse_hold(data['user_id'], data['hold_id'])
+    hold, error = wallet_services.reverse_hold(data['user_id'], data['hold_id'])
     if error:
         return jsonify({"error": error}), 400
     
