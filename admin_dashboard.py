@@ -157,15 +157,28 @@ elif page == "Reports":
     # Hold Report
     st.subheader("Hold Report")
     with st.form("hold_report_form"):
-        hold_report_user_id = st.number_input("User ID", step=1, key="hold_report_user_id")
+        col1, col2 = st.columns(2)
+        with col1:
+            use_global_hold = st.checkbox("Get Global Report (All Users)", key="global_hold_check")
+        with col2:
+            hold_report_user_id = st.number_input("User ID", min_value=1, value=1, step=1, key="hold_report_user_id", disabled=use_global_hold)
         
         if st.form_submit_button("Get Hold Report"):
             try:
-                response = requests.get(
-                    f"{BASE_URL}/report/hold_report",
-                    json={"user_id": hold_report_user_id},
-                    headers={"Content-Type": "application/json"}
-                )
+                if use_global_hold:
+                    # Send empty JSON for global report
+                    response = requests.get(
+                        f"{BASE_URL}/report/hold_report",
+                        json={},
+                        headers={"Content-Type": "application/json"}
+                    )
+                else:
+                    # Send user_id for specific user report
+                    response = requests.get(
+                        f"{BASE_URL}/report/hold_report",
+                        json={"user_id": hold_report_user_id},
+                        headers={"Content-Type": "application/json"}
+                    )
                 
                 if response.status_code == 200:
                     st.success("Hold report fetched successfully!")
@@ -180,15 +193,28 @@ elif page == "Reports":
     # Wallet Operation Report
     st.subheader("Wallet Operation Report")
     with st.form("operation_report_form"):
-        operation_user_id = st.number_input("User ID", step=1, key="operation_user_id")
+        col1, col2 = st.columns(2)
+        with col1:
+            use_global_operation = st.checkbox("Get Global Report (All Users)", key="global_operation_check")
+        with col2:
+            operation_user_id = st.number_input("User ID", min_value=1, value=1, step=1, key="operation_user_id", disabled=use_global_operation)
         
         if st.form_submit_button("Get Operation Report"):
             try:
-                response = requests.get(
-                    f"{BASE_URL}/report/wallet_operation_report",
-                    json={"user_id": operation_user_id},
-                    headers={"Content-Type": "application/json"}
-                )
+                if use_global_operation:
+                    # Send empty JSON for global report
+                    response = requests.get(
+                        f"{BASE_URL}/report/wallet_operation_report",
+                        json={},
+                        headers={"Content-Type": "application/json"}
+                    )
+                else:
+                    # Send user_id for specific user report
+                    response = requests.get(
+                        f"{BASE_URL}/report/wallet_operation_report",
+                        json={"user_id": operation_user_id},
+                        headers={"Content-Type": "application/json"}
+                    )
                 
                 if response.status_code == 200:
                     st.success("Operation report fetched successfully!")
