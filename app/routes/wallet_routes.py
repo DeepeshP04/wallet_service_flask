@@ -7,6 +7,10 @@ wallet_bp = Blueprint('wallet', __name__, url_prefix='/wallet')
 # Initialize wallet
 @wallet_bp.route('/init', methods=['POST'])
 def init_wallet():
+    # Validate the request data
+    # Call init_wallet service
+    # Serialize the response data.
+    # Return response in json.
     try:
         data = WalletRequestSchema().load(request.get_json())
     except Exception as e:
@@ -19,6 +23,7 @@ def init_wallet():
     response = WalletResponseSchema().dump(wallet)
     return jsonify({"message": "Wallet created successfully", "data": response}), 201
 
+# Add money to wallet
 @wallet_bp.route('/add_money', methods=['POST'])
 def add_money():
     try:
@@ -33,6 +38,7 @@ def add_money():
     response = WalletResponseSchema().dump(wallet)
     return jsonify({"message": "Money added to wallet", "data": response}), 200
 
+# Hold money from wallet
 @wallet_bp.route('/hold_money', methods=['POST'])
 def hold_money():
     try:
@@ -47,6 +53,7 @@ def hold_money():
     response = HoldResponseSchema().dump(hold)
     return jsonify({"message": "Money held successfully", "data": response}), 200
 
+# Release hold money
 @wallet_bp.route('/release_hold', methods=['POST'])
 def release_hold():
     try:
@@ -57,6 +64,7 @@ def release_hold():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# Reverse hold money
 @wallet_bp.route('/reverse_hold', methods=['POST'])
 def reverse_hold():
     try:

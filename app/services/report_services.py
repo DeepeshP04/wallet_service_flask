@@ -27,8 +27,12 @@ def get_wallet_operation_report(user_id):
         return None, "Wallet not found"
     add_count = OperationLog.query.filter_by(wallet_id=wallet.id, operation='add_money').count()
     hold_count = OperationLog.query.filter_by(wallet_id=wallet.id, operation='hold_money').count()
+    release_count = OperationLog.query.filter_by(wallet_id=wallet.id, operation='release_hold').count()
+    reverse_count = OperationLog.query.filter_by(wallet_id=wallet.id, operation='reverse_hold').count()
     result = {
         'add': add_count,
-        'hold': hold_count
+        'hold': hold_count,
+        'release': release_count,
+        'reverse': reverse_count
     }
     return result, None

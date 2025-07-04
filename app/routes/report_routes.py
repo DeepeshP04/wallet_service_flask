@@ -4,6 +4,7 @@ from app.services import wallet_services, report_services
 
 report_bp = Blueprint('report', __name__, url_prefix='/report')
 
+# Get wallet balance
 @report_bp.route('/wallet_balance', methods=['GET'])
 def wallet_balance():
     try:
@@ -18,6 +19,7 @@ def wallet_balance():
     response = WalletResponseSchema().dump(wallet)
     return jsonify({"message": "Wallet balance fetched successfully", "data": response}), 200
 
+# Get hold report
 @report_bp.route('/hold_report', methods=['GET'])
 def hold_report():
     try:
@@ -32,6 +34,7 @@ def hold_report():
     response = HoldReportResponseSchema().dump(result)
     return jsonify({"message": "Hold report fetched successfully", "data": response}), 200
 
+# Get wallet operation report
 @report_bp.route('/wallet_operation_report', methods=['GET'])
 def wallet_operation_report():
     try:

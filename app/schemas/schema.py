@@ -48,3 +48,5 @@ class WalletOperationRequestSchema(Schema):
 class WalletOperationResponseSchema(Schema):
     add = fields.Int()
     hold = fields.Int()
+    release = fields.Int()
+    reverse = fields.Int()

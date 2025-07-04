@@ -3,6 +3,8 @@ from app.extensions import db
 from datetime import datetime, timedelta
 
 def init_wallet(user_id, currency):
+    # Check for existing wallet
+    # Initialize wallet, if not exists
     existing_wallet = Wallet.query.filter_by(user_id=user_id).first()
     if existing_wallet:
         return None, "Wallet already exists"
@@ -13,6 +15,9 @@ def init_wallet(user_id, currency):
     return wallet, None
 
 def add_money_to_wallet(user_id, amount):
+    # Check if wallet exists or not and return if not exist
+    # Else increase the wallet balance by amount.
+    # Create operation log
     wallet = Wallet.query.get(user_id)
     if not wallet:
         return None, "Wallet not found"
@@ -25,12 +30,13 @@ def add_money_to_wallet(user_id, amount):
 
 def hold_money(user_id, amount):
     # Validate wallet exists and belongs to user
+    # Deduct from balance and create hold
+    # Create operation log
     wallet = Wallet.query.filter_by(user_id=user_id).first()
     if not wallet:
         return None, "Wallet not found"
     if wallet.balance < amount:
-        return None, "Insufficient balance to hold"
-    # Deduct from balance and create hold
+        return None, "Insufficient balance to hold
     wallet.balance -= amount
     hold = Hold(wallet_id=wallet.id, amount=amount, status='active')
     db.session.add(hold)
@@ -40,6 +46,9 @@ def hold_money(user_id, amount):
     return hold, None
 
 def release_hold():
+    # Check for all active holds for 10 or more minutes.
+    # Release the hold and update status to released and update released_at
+    # Create operation log.
     now = datetime.utcnow()
     ten_min_ago = now - timedelta(minutes=10)
     holds = Hold.query.filter(Hold.status == 'active', Hold.created_at <= ten_min_ago).all()
@@ -59,6 +68,10 @@ def release_hold():
     return released_count
 
 def reverse_hold(user_id, hold_id):
+    # Check for hold and active status
+    # Reverse the held funds to the wallet
+    # Update hold status and reversed_at time
+    # Create operation log
     hold = Hold.query.get(hold_id)
     if not hold:
         return None, "Hold not found"
