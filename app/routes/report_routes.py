@@ -23,11 +23,15 @@ def wallet_balance():
 @report_bp.route('/hold_report', methods=['GET'])
 def hold_report():
     try:
-        data = HoldReportRequestSchema().load(request.get_json())
+        data = HoldReportRequestSchema().load(request.get_json() or {})
     except Exception as e:
         return jsonify({"message": "Invalid request", "error": str(e)}), 400
 
-    result, error = report_services.get_hold_report(data['user_id'])
+    user_id = data.get('user_id')
+    if user_id:
+        result, error = report_services.get_hold_report(user_id)
+    else:
+        result, error = report_services.get_overall_hold_report()
     if error:
         return jsonify({"error": error}), 404
 
@@ -38,11 +42,15 @@ def hold_report():
 @report_bp.route('/wallet_operation_report', methods=['GET'])
 def wallet_operation_report():
     try:
-        data = WalletOperationRequestSchema().load(request.get_json())
+        data = WalletOperationRequestSchema().load(request.get_json() or {})
     except Exception as e:
         return jsonify({"message": "Invalid request", "error": str(e)}), 400
 
-    result, error = report_services.get_wallet_operation_report(data['user_id'])
+    user_id = data.get('user_id')
+    if user_id:
+        result, error = report_services.get_wallet_operation_report(user_id)
+    else:
+        result, error = report_services.get_overall_wallet_operation_report()
     if error:
         return jsonify({"error": error}), 404
 

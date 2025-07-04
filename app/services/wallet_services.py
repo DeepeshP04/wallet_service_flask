@@ -36,7 +36,7 @@ def hold_money(user_id, amount):
     if not wallet:
         return None, "Wallet not found"
     if wallet.balance < amount:
-        return None, "Insufficient balance to hold
+        return None, "Insufficient balance to hold"
     wallet.balance -= amount
     hold = Hold(wallet_id=wallet.id, amount=amount, status='active')
     db.session.add(hold)

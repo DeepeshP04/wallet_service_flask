@@ -35,7 +35,7 @@ class WalletBalanceRequestSchema(Schema):
     user_id = fields.Int(required=True)
 
 class HoldReportRequestSchema(Schema):
-    user_id = fields.Int(required=True)
+    user_id = fields.Int(required=False)
 
 class HoldReportResponseSchema(Schema):
     active = fields.Int()
@@ -43,7 +43,7 @@ class HoldReportResponseSchema(Schema):
     reversed = fields.Int()
 
 class WalletOperationRequestSchema(Schema):
-    user_id = fields.Int(required=True)
+    user_id = fields.Int(required=False)
 
 class WalletOperationResponseSchema(Schema):
     add = fields.Int()
